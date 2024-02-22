@@ -26,7 +26,7 @@ const Live = () => {
   }, []);
 
 const handlePointerUp = useCallback((event:React.PointerEvent)=>{
-  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.React ? {...State,isPressed:true}:state)
+  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.Reaction ? {...state,isPressed:true}:state)
 }, [cursorState.mode,setCursorState]);
 
 
@@ -36,7 +36,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
 
     updateMyPresence({ cursor: { x, y } });
   
-  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.React ? {...State,isPressed:true}:state)
+  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.Reaction ? {...state,isPressed:true}:state)
 }, [cursorState.mode,setCursorState]);
 
   useEffect(() => {
@@ -70,6 +70,10 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [updateMyPresence]);
+  
+  const setReaction = useCallback((reaction:string)=>{
+  setCursorState({mode:CursorMode.Reaction,reaction,isPressed:false})
+  },[])
   return (
     <div
       onPointerMove={handlePointerMove}
@@ -91,9 +95,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
 
       {cursorState.mode === CursorMode.ReactionSelector && (
         <ReactionSelector
-          setReaction={(reaction) => {
-            setCursorState({mode:CursorMode.Reaction,reaction,isPressed:false})
-          }}
+          setReaction={setReaction}
         />
       )}
       <LiveCursors others={others} />
