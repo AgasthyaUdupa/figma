@@ -8,7 +8,7 @@ import ReactionSelector from "./reaction/ReactionButton";
 const Live = () => {
   const others = useOthers();
   const [{ cursor }, updateMyPresence] = useMyPresence() as any;
-  const [cursorState, setCursorState] = useState({ mode: CursorMode.Hidden });
+  const [cursorState, setCursorState] = useState<CursorState>({ mode: CursorMode.Hidden });
 
   const [reactions, setReactions] = useState<Reaction[]>([]);
   const handlePointerMove = useCallback((event: React.PointerEvent) => {
@@ -26,15 +26,19 @@ const Live = () => {
   }, []);
 
 const handlePointerUp = useCallback((event:React.PointerEvent)=>{
-  
-})
+  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.React ? {...State,isPressed:true}:state)
+}, [cursorState.mode,setCursorState]);
+
 
   const handlePointerDown = useCallback((event: React.PointerEvent) => {
     const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
     const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
+
     updateMyPresence({ cursor: { x, y } });
-    setCursorState((state:CursorState)=>cursorState.mode === CursorMode.React) ? {...StaticRange,isPressed:true}:state
-  }, []);
+  
+  setCursorState((state:CursorState)=>cursorState.mode === CursorMode.React ? {...State,isPressed:true}:state)
+}, [cursorState.mode,setCursorState]);
+
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.key === "/") {
@@ -71,6 +75,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
       className="h-[100vh] w-full flex justify-center items-center text-center"
     >
       <h1 className="font-xl font-bold text-2xl text-white ">Hey</h1>
@@ -87,7 +92,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
       {cursorState.mode === CursorMode.ReactionSelector && (
         <ReactionSelector
           setReaction={(reaction) => {
-            setReaction(reaction);
+            setCursorState({mode:CursorMode.Reaction,reaction,isPressed:false})
           }}
         />
       )}
