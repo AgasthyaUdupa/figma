@@ -4,6 +4,8 @@ import { useMyPresence, useOthers } from "@/liveblocks.config";
 import CursorChat from "./Cursor/CursorChat";
 import { CursorMode, CursorState, Reaction } from "@/types/type";
 import ReactionSelector from "./reaction/ReactionButton";
+import FlyingReaction from "./reaction/FlyingReaction";
+import useInterval from "@/hooks/useInterval";
 
 const Live = () => {
   const others = useOthers();
@@ -11,6 +13,9 @@ const Live = () => {
   const [cursorState, setCursorState] = useState<CursorState>({ mode: CursorMode.Hidden });
 
   const [reactions, setReactions] = useState<Reaction[]>([]);
+
+useInterval
+
   const handlePointerMove = useCallback((event: React.PointerEvent) => {
     event.preventDefault();
     if (cursor === null || cursorState.mode !== CursorMode.ReactionSelector) {
@@ -83,6 +88,13 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
       className="h-[100vh] w-full flex justify-center items-center text-center"
     >
       <h1 className="font-xl font-bold text-2xl text-white ">Hey</h1>
+{reactions.map((r)=>{
+  <FlyingReaction key={r.timestamp.toString()}
+  x={r.point.x}
+  y={r.point.y}
+  timestamp={r.timestamp}
+  value={r.value} />
+})}
 
       {cursor && (
         <CursorChat
