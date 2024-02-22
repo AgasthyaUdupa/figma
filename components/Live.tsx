@@ -14,7 +14,15 @@ const Live = () => {
 
   const [reactions, setReactions] = useState<Reaction[]>([]);
 
-useInterval
+useInterval(()=>{
+  if(cursorState.mode === CursorMode.Reaction && cursorState.isPressed && cursor){
+    setReactions((reactions)=>reactions.concat([{
+      point:{x:cursor.x,y:cursor.y},
+      value:cursorState.reaction,
+      timestamp:Date.now(),}
+    ]))
+  }
+},100)
 
   const handlePointerMove = useCallback((event: React.PointerEvent) => {
     event.preventDefault();
