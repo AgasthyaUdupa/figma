@@ -19,7 +19,7 @@ useInterval(()=>{
     setReaction((reactions)=>reactions.concat([{
       point:{x:cursor.x,y:cursor.y},
       value:cursorState.reaction,
-      timestamp:Date.now(),}
+      timestamp:Date.now()}
     ]))
   }
 },100)
@@ -97,7 +97,8 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
     >
       <h1 className="font-xl font-bold text-2xl text-white ">Hey</h1>
 {reaction.map((r)=>{
-  <FlyingReaction key={r.timestamp.toString()}
+  <FlyingReaction
+   key={r.timestamp.toString()}
   x={r.point.x}
   y={r.point.y}
   timestamp={r.timestamp}
