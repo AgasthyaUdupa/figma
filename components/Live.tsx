@@ -12,11 +12,11 @@ const Live = () => {
   const [{ cursor }, updateMyPresence] = useMyPresence() as any;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: CursorMode.Hidden });
 
-  const [reactions, setReactions] = useState<Reaction[]>([]);
+  const [reaction, setReaction] = useState<Reaction[]>([]);
 
 useInterval(()=>{
   if(cursorState.mode === CursorMode.Reaction && cursorState.isPressed && cursor){
-    setReactions((reactions)=>reactions.concat([{
+    setReaction((reactions)=>reactions.concat([{
       point:{x:cursor.x,y:cursor.y},
       value:cursorState.reaction,
       timestamp:Date.now(),}
@@ -84,7 +84,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
     };
   }, [updateMyPresence]);
   
-  const setReaction = useCallback((reaction:string)=>{
+  const setReactions = useCallback((reaction:string)=>{
   setCursorState({mode:CursorMode.Reaction,reaction,isPressed:false})
   },[])
   return (
@@ -96,7 +96,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
       className="h-[100vh] w-full flex justify-center items-center text-center"
     >
       <h1 className="font-xl font-bold text-2xl text-white ">Hey</h1>
-{reactions.map((r)=>{
+{reaction.map((r)=>{
   <FlyingReaction key={r.timestamp.toString()}
   x={r.point.x}
   y={r.point.y}
@@ -115,7 +115,7 @@ const handlePointerUp = useCallback((event:React.PointerEvent)=>{
 
       {cursorState.mode === CursorMode.ReactionSelector && (
         <ReactionSelector
-          setReaction={setReaction}
+          setReaction={setReactions}
         />
       )}
       <LiveCursors others={others} />
